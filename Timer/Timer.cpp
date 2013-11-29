@@ -44,6 +44,7 @@ void Timer::setup_Timer()
 	{
 		return;
 	}
+	m_stopFlag = -1;
 	m_thread = new thread(&Timer::timerThread, std::ref(m_stopFlag));
 	
 
