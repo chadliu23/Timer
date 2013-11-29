@@ -1,9 +1,9 @@
 CC=g++
 CFLAGS=-c -Wall -std=c++11
 LDFLAGS=
-SOURCES=main.cpp timer.cpp
+SOURCES=./Timer/main.cpp ./Timer/timer.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=hello
+EXECUTABLE=TimerEx
 
 all: $(SOURCES) $(EXECUTABLE)
 	
