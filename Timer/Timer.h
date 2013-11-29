@@ -5,14 +5,14 @@ class Timer
 public:
 	Timer(void);
 	~Timer(void);
-	void setup_Timer(int milliseconds);
+	void setup_Timer();
 	static void print_Time();
-	static void timerThread(int milliseconds);
+	static void timerThread(int& stopFlag);
 	void stop();
 	
 private:
-	int m_milliseconds;
 	std::thread* m_thread;
+	int m_stopFlag;
 
 };
 

@@ -6,14 +6,15 @@
 using namespace std;
 
 Timer::Timer(void)
-	: m_milliseconds(0)
-	, m_thread(nullptr)
+	: m_thread(nullptr)
+	, m_stopFlag(-1)
 {
 }
 
 
 Timer::~Timer(void)
 {
+	m_stopFlag = 1;
 	if(m_thread != nullptr)
 	{
 		m_thread->detach();
@@ -22,25 +23,28 @@ Timer::~Timer(void)
 	}
 }
 
-void Timer::timerThread(int milliseconds)
+void Timer::timerThread(int& stopFlag)
 {
 	while(true)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		if(stopFlag == 1)
+		{
+			stopFlag = -1;
+			break;
+		}
 		Timer::print_Time();
 	}
 }
 
-void Timer::setup_Timer(int milliseconds)
+void Timer::setup_Timer()
 {
-	m_milliseconds = milliseconds;
+	//m_milliseconds = milliseconds;
 	if(m_thread != nullptr)
 	{
-		m_thread->detach();
-		delete m_thread;
-		m_thread = nullptr;
+		return;
 	}
-	m_thread = new thread(&Timer::timerThread, milliseconds);
+	m_thread = new thread(&Timer::timerThread, std::ref(m_stopFlag));
 	
 
 }
@@ -56,6 +60,7 @@ void Timer::stop()
 {
 	if(m_thread != nullptr)
 	{
+		m_stopFlag = 1;
 		m_thread->detach();
 		delete m_thread;
 		m_thread = nullptr;
